@@ -2,6 +2,12 @@ defmodule RumblWeb.VideoControllerTest do
   use RumblWeb.ConnCase, async: true
 
   describe "without a logged-in user" do
+    @create_attrs %{
+      url: "http://youtu.be",
+      title: "vid",
+      description: "a vid"
+    }
+
     test "requires user authentication on all actions", %{conn: conn} do
       Enum.each([
         get(conn, Routes.video_path(conn, :new)),
@@ -83,7 +89,7 @@ defmodule RumblWeb.VideoControllerTest do
     test "does not create vid, renders errors when invalid", %{conn: conn} do
       count_before = video_count()
       conn = post conn, Routes.video_path(conn, :create), video: @invalid_attrs
-      assert html_reponse(conn, 200) =~ "check the errors"
+      assert html_response(conn, 200) =~ "check the errors"
       assert video_count() == count_before
     end
   end
